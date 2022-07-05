@@ -1,14 +1,16 @@
 import request from './request'
 
-const login = () => {
-  return request({ url: '/login', method: 'POST' })
+export const login = (model) => {
+  return request.post(
+    `/login?username=${model.username}&password=${model.password}&code=${model.code}&token=${model.token}`
+  )
 }
 
-const captcha = (data) => {
-  return request({ url: '/captcha', method: 'GET', data })
+export const captchaItem = () => {
+  return request.get('/captcha')
 }
 
-export default {
-  captcha,
-  login
-}
+// export default {
+//   captcha,
+//   login
+// }

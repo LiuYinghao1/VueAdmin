@@ -16,8 +16,14 @@
       </el-form-item>
       <el-form-item label="验证码" prop="code">
         <el-input v-model="ruleForm.code" />
+        <el-image
+          :src="captchaImg"
+          @click="getCodeUrl"
+          alt=""
+          class="codeImg"
+        ></el-image>
       </el-form-item>
-      <!-- <img :src="captchaImg" alt=""> -->
+
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)"
           >登录</el-button
@@ -28,13 +34,14 @@
   </div>
 </template>
 <script setup>
-import { reactive } from 'vue'
-import user from '@/api/user'
-
+import { reactive, ref } from 'vue'
+import { login, captchaItem } from '@/api/user.js'
+import { useRouter } from 'vue-router'
 const ruleForm = reactive({
-  username: 'text',
+  username: 'test',
   password: '1234567',
-  code: ''
+  code: '',
+  token: ''
 })
 const rules = reactive({
   username: [
@@ -44,18 +51,33 @@ const rules = reactive({
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 3, max: 5, message: '长度为3-10位', trigger: 'blur' }
-  ]
+  ],
+  code: ''
 })
-const submitForm = async () => {
-  const loginList = await user.login(ruleForm)
-  console.log(loginList)
+const router = useRouter()
+const captchaImg = ref('')
+const getCodeUrl = async () => {
+  const res = await captchaItem()
+  console.log(res)
+  captchaImg.value = res.captchaImg
+  ruleForm.token = res.token
 }
+getCodeUrl()
 
 const getCode = async () => {
-  const getcaptcha = await user.captcha()
+  const getcaptcha = await captchaItem.captchaItem()
   console.log(getcaptcha)
 }
+
+const submitForm = async () => {
+  try {
+    console.log(ruleForm)
+    await login(ruleForm)
+    await router.push('/')
+  } catch (error) {}
+}
 </script>
+
 <style lang="scss" scoped>
 .contianer {
   border-radius: 10px;
@@ -72,5 +94,8 @@ const getCode = async () => {
     align-items: center;
     margin-top: 80px;
   }
+}
+.codeImg {
+  float: left;
 }
 </style>
