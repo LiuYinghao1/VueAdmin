@@ -1,7 +1,5 @@
 <template>
-  <div>
-    首页
-  </div>
+  <div>401</div>
 </template>
 
 <script setup>

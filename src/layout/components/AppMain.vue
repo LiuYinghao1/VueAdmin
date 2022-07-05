@@ -1,7 +1,9 @@
 <template>
-  <div>
-    首页
-  </div>
+
+  <a-card>
+    <router-view></router-view>
+  </a-card>
+
 </template>
 
 <script setup>

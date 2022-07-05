@@ -1,7 +1,5 @@
 <template>
-  <div>
-    首页
-  </div>
+  <div>数字字典</div>
 </template>
 
 <script setup>
